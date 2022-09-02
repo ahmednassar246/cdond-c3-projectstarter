@@ -126,7 +126,7 @@ jobs:
       - run:
           name: Analyze Back-end
           command: |
-            cd frontend
+            cd backend
             npm install
             # npm install oauth-sign@^0.9.0
             npm audit fix --audit-level=critical --force
@@ -166,6 +166,8 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt
+
+      - destroy-environment
       # Here's where you will add some code to rollback on failure      
 
   configure-infrastructure:
@@ -177,7 +179,7 @@ jobs:
           fingerprints: ["35:73:5d:e9:ad:ce:50:1f:e3:98:99:b3:f8:4d:15:42"] 
 
       - attach_workspace:
-          at: ~/project/.circleci/ansible/inventory.txt
+          at: ~/
 
       - run:
           name: Install dependencies
@@ -217,22 +219,33 @@ jobs:
       - checkout
 
       - attach_workspace:
-          at: ~/cdond-c3-projectstarter/.circleci/ansible/inventory.txt
+          at: ~/
 
       - run:
           name: Install dependencies
           command: |
-            # your code here
+            sudo yum install python3
+            python3 -m pip install --user ansible
+            ansible --version
       - run:
           name: Get backend url
           command: |
-            # your code here
+            export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=udapeople")
             export API_URL="http://${BACKEND_IP}:3030"
-            echo "${API_URL}"
+            echo "API_URL = ${API_URL}"
+            echo API_URL="http://${BACKEND_IP}:3030" >> frontend/.env
+            cat frontend/.env
+
       - run:
           name: Deploy frontend objects
           command: |
-            # your code here
+            cd frontend
+            npm install
+            npm run build
+            tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7}".tar.gz dist
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
+
+      - destroy-environment
       # Here's where you will add some code to rollback on failure      
                     
   deploy-backend:
@@ -276,4 +289,6 @@ workflows:
       - run-migrations:
           requires:
             - configure-infrastructure
-
+      - deploy-frontend:
+          requires:
+            - run-migrations

@@ -165,7 +165,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - .circleci/ansible/inventory.txt
+            - cdond-c3-projectstarter/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure      
 
   configure-infrastructure:
@@ -177,7 +177,7 @@ jobs:
           fingerprints: ["35:73:5d:e9:ad:ce:50:1f:e3:98:99:b3:f8:4d:15:42"] 
 
       - attach_workspace:
-          at: ~/.circleci/ansible/inventory.txt
+          at: ~/cdond-c3-projectstarter/.circleci/ansible/inventory.txt
 
       - run:
           name: Install dependencies
@@ -209,6 +209,44 @@ jobs:
                   curl https://kvdb.io/VZVF4AHGi3Kkw5hS58Ur2M/migration_${CIRCLE_WORKFLOW_ID:0:7}  -d '1'
               fi
       # Here's where you will add some code to rollback on failure      
+
+  deploy-frontend:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+      - run:
+          name: Deploy frontend objects
+          command: |
+            # your code here
+      # Here's where you will add some code to rollback on failure      
+                    
+  deploy-backend:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      # Add ssh keys with fingerprint
+      # attach workspace
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+      - run:
+          name: Deploy backend
+          command: |
+            # your code here
+      # Here's where you will add some code to rollback on failure  
 
 workflows:
   default:

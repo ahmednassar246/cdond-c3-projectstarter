@@ -165,7 +165,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - cdond-c3-projectstarter/.circleci/ansible/inventory.txt
+            - project/.circleci/ansible/inventory.txt
       # Here's where you will add some code to rollback on failure      
 
   configure-infrastructure:
@@ -177,7 +177,7 @@ jobs:
           fingerprints: ["35:73:5d:e9:ad:ce:50:1f:e3:98:99:b3:f8:4d:15:42"] 
 
       - attach_workspace:
-          at: ~/cdond-c3-projectstarter/.circleci/ansible/inventory.txt
+          at: ~/project/.circleci/ansible/inventory.txt
 
       - run:
           name: Install dependencies
@@ -215,6 +215,10 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+
+      - attach_workspace:
+          at: ~/cdond-c3-projectstarter/.circleci/ansible/inventory.txt
+
       - run:
           name: Install dependencies
           command: |

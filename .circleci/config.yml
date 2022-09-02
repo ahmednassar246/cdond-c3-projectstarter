@@ -189,7 +189,7 @@ jobs:
           command: |
             cd .circleci/ansible
             ansible-playbook -i inventory.txt configure-server.yml
-            
+
 workflows:
   default:
     jobs:
@@ -208,4 +208,6 @@ workflows:
           requires:
             - scan-frontend
             - scan-backend
-
+      - configure-infrastructure:
+          requires:
+            - deploy-infrastructure

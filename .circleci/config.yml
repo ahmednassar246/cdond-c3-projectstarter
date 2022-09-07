@@ -367,4 +367,4 @@ workflows:
             - run-migrations
       - notify_on_success:
           requires:
-            - deploy-frontend
+            [deploy-backend, deploy-frontend, scan-frontend, scan-backend]

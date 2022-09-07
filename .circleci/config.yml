@@ -347,7 +347,6 @@ jobs:
             unzip awscliv2.zip
             ./aws/install
 
-      - install_nodejs
       - restore_cache:
           keys: [backend-build]
 

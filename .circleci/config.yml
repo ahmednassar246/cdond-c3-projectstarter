@@ -49,14 +49,16 @@ commands:
           event: fail
           channel: cicd-pipeline
           template: basic_fail_1
+
+jobs:
   notify_on_success:
+    docker:
+      - image: cimg/base:stable
     steps:
       - slack/notify:
           event: pass
           channel: cicd-pipeline
           template: success_tagged_deployment_1
-
-jobs:
   build-frontend:
     docker:
       - image: circleci/node:13.8.0

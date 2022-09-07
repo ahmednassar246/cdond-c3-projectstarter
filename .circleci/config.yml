@@ -56,7 +56,7 @@ commands:
     steps:
       - slack/notify:
           event: fail
-          channel: cicd-pipeline
+          channel: it
           template: basic_fail_1
   install_nodejs:
     description: Install Node.js 13.8.0
@@ -79,7 +79,7 @@ jobs:
     steps:
       - slack/notify:
           event: pass
-          channel: cicd-pipeline
+          channel: it
           template: success_tagged_deployment_1
   build-frontend:
     docker:

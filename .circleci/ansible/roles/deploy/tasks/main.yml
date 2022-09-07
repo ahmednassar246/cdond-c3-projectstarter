@@ -4,10 +4,6 @@
     path: ~/backend-app
     state: directory
 
-- name: "print directory files"
-  shell: |
-    ls
-
 - copy:
     src: ~/project/.circleci/ansible/roles/deploy/files/artifact.tar.gz
     dest: /home/ubuntu/backend

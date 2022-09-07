@@ -30,7 +30,7 @@ commands:
           when: on_fail
           command: |
             SUCCESS=$(curl --insecure  https://kvdb.io/${KVDB_BUCKET}/migration_<< parameters.Workflow_ID >>)
-            if(( $SUCCESS==1 )); 
+            if(( $SUCCESS==1 ));
             then
               cd ~/project/backend
               npm install
@@ -335,7 +335,7 @@ jobs:
       - revert-migrations
   smoke-test:
     docker:
-      - image: cimg/python:3.10
+      - image: alpine:latest
     steps:
       - checkout
       - install_awscli
@@ -343,9 +343,9 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            sudo apt-get update
-            sudo apt-get install curl
-
+            apk add --update curl
+      - install_awscli
+      - install_nodejs
       - restore_cache:
           keys: [backend-build]
 
@@ -357,10 +357,11 @@ jobs:
             echo "${API_URL}"
             if curl "${API_URL}/api/status" | grep "ok"
             then
-              return 0
+              return 0;
             else
-              return 1
+              return 1;
             fi
+
       - run:
           name: Frontend smoke test.
           command: |

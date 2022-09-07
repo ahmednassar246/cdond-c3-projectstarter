@@ -4,8 +4,12 @@
     path: ~/backend-app
     state: directory
 
+- name: "print directory files"
+  shell: |
+    ls
+
 - copy:
-    src: ~/project/.circleci/ansible/roles/deploy/artifact.tar.gz
+    src: ~/project/.circleci/ansible/roles/deploy/files/artifact.tar.gz
     dest: /home/ubuntu/backend
 
 - name: "Unarchive backend files"

@@ -351,6 +351,10 @@ jobs:
           keys: [backend-build]
 
       - run:
+          name: Get backend url
+          command: |
+            aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=udapeople" --output text
+      - run:
           name: Backend smoke test.
           command: |
             export BACKEND_IP=$(aws ec2 describe-instances --query 'Reservations[*].Instances[*].PublicIpAddress' --filters "Name=tag:Project,Values=udapeople" --output text)

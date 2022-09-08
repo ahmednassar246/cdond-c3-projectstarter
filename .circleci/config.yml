@@ -464,12 +464,12 @@ workflows:
       - deploy-backend:
           requires:
             - run-migrations
-      - smoke-test:
-          requires: [deploy-backend, deploy-frontend]
-      - cloudfront-update:
-          requires: [smoke-test]
-      - cleanup:
-          requires: [cloudfront-update]
-      - notify_on_success:
-          requires:
-            - cleanup
+      # - smoke-test:
+      #     requires: [deploy-backend, deploy-frontend]
+      # - cloudfront-update:
+      #     requires: [smoke-test]
+      # - cleanup:
+      #     requires: [cloudfront-update]
+      # - notify_on_success:
+      #     requires:
+      #       - cleanup
